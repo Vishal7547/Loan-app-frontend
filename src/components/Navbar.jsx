@@ -4,13 +4,23 @@ import { userContext } from "../context/myContext";
 const Navbar = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, loLogOut } = useContext(userContext);
+  const { user, loLogOut, gallery, setFilterGallery } = useContext(userContext);
+
   const handleLogout = async () => {
     const data = await loLogOut();
     if (data.success) {
       navigate("/login");
     }
   };
+  const handleSearch = (e) => {
+    const data = e.target.value;
+    const galleryItem = gallery.filter((g) =>
+      g?.name?.toLowerCase().includes(data.toLowerCase())
+    );
+    setFilterGallery(galleryItem);
+    console.log(galleryItem);
+  };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary header">
@@ -55,10 +65,8 @@ const Navbar = () => {
                     type="search"
                     placeholder="Search"
                     aria-label="Search"
+                    onChange={handleSearch}
                   />
-                  <button className="btn btn-outline-success" type="submit">
-                    Search
-                  </button>
                 </form>
               )}
             </div>

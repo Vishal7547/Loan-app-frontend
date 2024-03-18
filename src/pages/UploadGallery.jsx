@@ -8,9 +8,12 @@ import { userContext } from "../context/myContext";
 const UploadGallery = () => {
   const { open, handleOpen, handleClose } = useModal();
   const [imgModel, setImgModel] = useState(null);
-  const { addImage, gallery, loader, deletePic } = useContext(userContext);
+  const { addImage, gallery, loader, deletePic, setGallery } =
+    useContext(userContext);
   const [imageFile, setImageFile] = useState(null);
   const [name, setName] = useState("");
+  const [filterGallery, setFilterGallery] = useState([]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,12 +24,21 @@ const UploadGallery = () => {
     setImageFile("");
     setName("");
   };
-  const handleDelete = async (id) => {
-    await deletePic(id);
-  };
+
   const handleSearch = (e) => {
     const data = e.target.value;
+    const galleryItem = gallery.filter((g) =>
+      g?.name?.toLowerCase().includes(data.toLowerCase())
+    );
+    setFilterGallery(galleryItem);
+    console.log(galleryItem);
   };
+  let pic = filterGallery.length > 0 ? filterGallery : gallery;
+  const handleDelete = async (id) => {
+    await deletePic(id);
+    pic = gallery;
+  };
+  console.log("filterGallery", filterGallery);
   return (
     <div className="uploadGallery">
       <form className="row" onSubmit={handleSubmit}>
@@ -79,49 +91,58 @@ const UploadGallery = () => {
             </tr>
           </thead>
           <tbody>
-            {gallery.map((g, i) => (
+            {pic.length > 0 ? (
+              pic?.map((g, i) => (
+                <tr key={g._id}>
+                  <th scope="row">{i + 1}</th>
+                  <td>
+                    <img
+                      alt={g?.name}
+                      src={g?.pic?.url}
+                      height="40"
+                      width="40"
+                      className="rounded"
+                    />
+                  </td>
+                  <td>{g?.name}</td>
+                  <td>
+                    {loader ? (
+                      <div className="spinner-border" role="status">
+                        <span
+                          style={{ height: "20px", width: "20px" }}
+                          className="visually-hidden"
+                        >
+                          Loading...
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <span
+                          className="crudIcon"
+                          onClick={() => handleDelete(g?._id)}
+                        >
+                          <MdOutlineDelete fontSize={25} />
+                        </span>
+                        <span
+                          onClick={() => {
+                            setImgModel(g);
+                            handleOpen();
+                          }}
+                        >
+                          <GrFormView fontSize={30} />
+                        </span>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
               <tr>
-                <th scope="row">{i + 1}</th>
-                <td>
-                  <img
-                    alt={g?.name}
-                    src={g?.pic?.url}
-                    height="40"
-                    width="40"
-                    className="rounded"
-                  />
-                </td>
-                <td>{g?.name}</td>
-                <td>
-                  {loader ? (
-                    <div className="spinner-border" role="status">
-                      <span
-                        style={{ height: "20px", width: "20px" }}
-                        className="visually-hidden"
-                      >
-                        Loading...
-                      </span>
-                    </div>
-                  ) : (
-                    <span
-                      className="crudIcon"
-                      onClick={() => handleDelete(g?._id)}
-                    >
-                      <MdOutlineDelete fontSize={25} />
-                    </span>
-                  )}
-
-                  <span
-                    onClick={() => {
-                      setImgModel(g);
-                      handleOpen();
-                    }}
-                  >
-                    <GrFormView fontSize={30} />
-                  </span>
+                <td colSpan="4">
+                  <h5>Please upload images</h5>
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

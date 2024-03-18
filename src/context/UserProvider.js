@@ -8,6 +8,8 @@ const UserProvider = ({ children }) => {
   const [gallery, setGallery] = useState([]);
   const [loader, setLoader] = useState(false);
   const [isUpload, setIsUpload] = useState(false);
+  const [filterGallery, setFilterGallery] = useState([]);
+
   const handleLoad = async () => {
     try {
       const { data } = await axios.get(
@@ -34,6 +36,7 @@ const UserProvider = ({ children }) => {
       if (data.success) {
         console.log("logout", data);
         setUser(null);
+        setGallery([]);
         setAuthenticate(false);
         return data;
       }
@@ -111,6 +114,9 @@ const UserProvider = ({ children }) => {
         loader,
         deletePic,
         isUpload,
+        setGallery,
+        setFilterGallery,
+        filterGallery,
       }}
     >
       {children}

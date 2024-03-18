@@ -9,7 +9,8 @@ import { PrivateAuth } from "./routes/PrivateAuth";
 import { PrivateRoute } from "./routes/PrivateRoute";
 import { userContext } from "./context/myContext";
 const App = () => {
-  const { handleLoad, handleFetchGallery, isUpload } = useContext(userContext);
+  const { handleLoad, handleFetchGallery, isUpload, isLogin } =
+    useContext(userContext);
   useEffect(() => {
     const loadData = async () => {
       await handleLoad();
@@ -21,7 +22,7 @@ const App = () => {
       await handleFetchGallery();
     };
     loadData();
-  }, [isUpload]);
+  }, [isUpload, isLogin]);
   return (
     <div>
       <BrowserRouter>

@@ -15,10 +15,12 @@ import { userContext } from "../context/myContext";
 import { useContext } from "react";
 import { PrivateRoute } from "../routes/PrivateRoute";
 export const Gallery = () => {
-  const { gallery, loader } = useContext(userContext);
+  const { gallery, loader, filterGallery } = useContext(userContext);
+
   const onInit = () => {
     console.log("lightGallery has been initialized");
   };
+  let pic = filterGallery.length > 0 ? filterGallery : gallery;
 
   return (
     <div className="m-2">
@@ -28,11 +30,15 @@ export const Gallery = () => {
         speed={500}
         plugins={[lgThumbnail, lgZoom, lgFullScreen, lgAutoPlay]}
       >
-        {gallery?.map((g, i) => (
-          <a href={g?.pic?.url}>
-            <img alt={g?.name} src={g?.pic?.url} />
-          </a>
-        ))}
+        {pic.length > 0 ? (
+          pic?.map((g, i) => (
+            <a href={g?.pic?.url}>
+              <img alt={g?.name} src={g?.pic?.url} />
+            </a>
+          ))
+        ) : (
+          <h5>Please upload images</h5>
+        )}
       </LightGallery>
     </div>
   );
