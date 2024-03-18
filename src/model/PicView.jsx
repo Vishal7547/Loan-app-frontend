@@ -24,10 +24,7 @@ const PicView = ({ open, handleClose, imgModel }) => {
         <Box sx={style}>
           <div className="row useModelParent m-0 p-0 g-0">
             <span onClick={handleClose}>X</span>
-            <img
-              src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-              alt=""
-            />
+            <img alt={imgModel?.name} src={imgModel?.pic?.url} />
           </div>
         </Box>
       </Modal>

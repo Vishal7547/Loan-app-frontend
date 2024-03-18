@@ -52,7 +52,7 @@ img:hover {
 }
 
 .crudIcon {
-  margin: 0 10px;
+  /* margin: 0 10px; */
 
 }
 
@@ -182,6 +182,7 @@ td span {
   display: flex;
   justify-content: center;
   align-items: center;
+  opacity: 0.4 !important;
 }
 
 .loader div {

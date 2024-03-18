@@ -1,28 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { MdEdit, MdOutlineDelete } from "react-icons/md";
 import { GrFormView } from "react-icons/gr";
 import useModal from "../hooks/useModel";
 import PicView from "../model/PicView";
+import { userContext } from "../context/myContext";
+
 const UploadGallery = () => {
   const { open, handleOpen, handleClose } = useModal();
   const [imgModel, setImgModel] = useState(null);
+  const { addImage, gallery, loader, deletePic } = useContext(userContext);
+  const [imageFile, setImageFile] = useState(null);
+  const [name, setName] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("name", name);
+    await addImage(formData);
+    setImageFile("");
+    setName("");
+  };
+  const handleDelete = async (id) => {
+    await deletePic(id);
+  };
+  const handleSearch = (e) => {
+    const data = e.target.value;
+  };
   return (
     <div className="uploadGallery">
-      <div className="child">
-        <div className="row mt-2">
-          <input
-            className="form-control me-2"
-            type="file"
-            placeholder="upload"
-          />
+      <form className="row" onSubmit={handleSubmit}>
+        <div className="child">
+          <div className="row mt-2">
+            <input
+              className="form-control me-2"
+              type="file"
+              placeholder="upload"
+              onChange={(e) => setImageFile(e.target.files[0])}
+              required
+            />
+          </div>
+          <div className="row my-2">
+            <input
+              className="form-control me-2"
+              type="name"
+              placeholder="Name"
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="row">
+            <button className="btn btn-success w-25">
+              {loader ? "Loading..." : "Submit"}
+            </button>
+          </div>
         </div>
-        <div className="row my-2">
-          <input className="form-control me-2" type="name" placeholder="Name" />
-        </div>
-        <div className="row">
-          <button className="btn btn-success w-25">Submit</button>
-        </div>
-      </div>
+      </form>
       <div className="galleryData">
         <div>
           <div className="row my-2 w-50">
@@ -31,6 +64,7 @@ const UploadGallery = () => {
                 className="form-control me-2"
                 type="search"
                 placeholder="Search"
+                onChange={handleSearch}
               />
             </form>
           </div>
@@ -45,26 +79,38 @@ const UploadGallery = () => {
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4].map((g, i) => (
+            {gallery.map((g, i) => (
               <tr>
                 <th scope="row">{i + 1}</th>
                 <td>
                   <img
-                    src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-                    alt="img1"
+                    alt={g?.name}
+                    src={g?.pic?.url}
                     height="40"
                     width="40"
                     className="rounded"
                   />
                 </td>
-                <td>@mdo</td>
+                <td>{g?.name}</td>
                 <td>
-                  <span>
-                    <MdEdit fontSize={25} />
-                  </span>
-                  <span className="crudIcon">
-                    <MdOutlineDelete fontSize={25} />
-                  </span>
+                  {loader ? (
+                    <div className="spinner-border" role="status">
+                      <span
+                        style={{ height: "20px", width: "20px" }}
+                        className="visually-hidden"
+                      >
+                        Loading...
+                      </span>
+                    </div>
+                  ) : (
+                    <span
+                      className="crudIcon"
+                      onClick={() => handleDelete(g?._id)}
+                    >
+                      <MdOutlineDelete fontSize={25} />
+                    </span>
+                  )}
+
                   <span
                     onClick={() => {
                       setImgModel(g);
