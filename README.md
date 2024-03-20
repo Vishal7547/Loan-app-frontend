@@ -15,16 +15,23 @@ The Mini-Loan App is a web application that allows authenticated users to apply 
 
 ## Installation
 
-1. Clone the repository: `git clone <repository-url>`
+- Clone the repository [Frontend]: `git clone https://github.com/Vishal7547/Loan-app-frontend`
+
+- Clone the repository [Backend]: `https://github.com/Vishal7547/Loan-app-backend`
+
+- frontend live url : `https://loan-app-frontend-phi.vercel.app/login`
+
 2. Install dependencies:
    - Server: `cd server && npm install`
    - Client: `cd client && npm install`
 3. Set up environment variables:
+
    - Create a `.env` file in the server directory.
    - Add the following variables to the `.env` file:
 
      PORT=4000
      MONGO_URI=<your-mongodb-uri>
+
 4. Run the server: `npm run dev` in the server directory.
 5. Run the client: `npm start` in the client directory.
 6. Access the app at `http://localhost:3000`.
