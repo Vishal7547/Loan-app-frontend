@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../context/myContext";
 const Navbar = () => {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { user, loLogOut, gallery, setFilterGallery } = useContext(userContext);
+  const { user, loLogOut } = useContext(userContext);
 
   const handleLogout = async () => {
     const data = await loLogOut();
@@ -12,21 +11,13 @@ const Navbar = () => {
       navigate("/login");
     }
   };
-  const handleSearch = (e) => {
-    const data = e.target.value;
-    const galleryItem = gallery.filter((g) =>
-      g?.name?.toLowerCase().includes(data.toLowerCase())
-    );
-    setFilterGallery(galleryItem);
-    console.log(galleryItem);
-  };
 
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary header">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/gallery">
-            Dobby Ads
+          <Link className="navbar-brand" to="/">
+            Techdome
           </Link>
           <button
             className="navbar-toggler"
@@ -41,11 +32,11 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link " aria-current="page" to="/upload">
                   Upload Image
                 </Link>
-              </li>
+              </li> */}
             </ul>
             <div className="d-flex">
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -58,17 +49,6 @@ const Navbar = () => {
                   </span>
                 </li>
               </ul>
-              {pathname === "/gallery" && (
-                <form className="d-flex" role="search">
-                  <input
-                    className="form-control me-2"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                    onChange={handleSearch}
-                  />
-                </form>
-              )}
             </div>
           </div>
         </div>

@@ -2,14 +2,16 @@ import React, { useEffect, useContext } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
-import UploadGallery from "./pages/UploadGallery";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+
 import { PrivateAuth } from "./routes/PrivateAuth";
 import { PrivateRoute } from "./routes/PrivateRoute";
+import { AdminRoute } from "./routes/AdminRoute";
 import { userContext } from "./context/myContext";
+import LoanRequest from "./pages/Admin/LoanRequest";
 const App = () => {
-  const { handleLoad, handleFetchGallery, isUpload, isLogin } =
+  const { handleLoad, handleFetchLoan, isUpload, isLogin } =
     useContext(userContext);
   useEffect(() => {
     const loadData = async () => {
@@ -19,7 +21,7 @@ const App = () => {
   }, []);
   useEffect(() => {
     const loadData = async () => {
-      await handleFetchGallery();
+      await handleFetchLoan();
     };
     loadData();
   }, [isUpload, isLogin]);
@@ -33,7 +35,7 @@ const App = () => {
 };
 const AppRoute = () => {
   const { pathname } = useLocation();
-  const pathsWithoutHeader = ["/gallery", "/upload"];
+  const pathsWithoutHeader = ["/"];
   const shouldShowHeader = pathsWithoutHeader.includes(pathname);
 
   return (
@@ -41,8 +43,11 @@ const AppRoute = () => {
       {shouldShowHeader && <Navbar />}
       <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path="/gallery" element={<Home />} />
-          <Route path="/upload" element={<UploadGallery />} />
+          <Route path="/" element={<Home />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/request" element={<LoanRequest />} />
         </Route>
 
         <Route element={<PrivateAuth />}>

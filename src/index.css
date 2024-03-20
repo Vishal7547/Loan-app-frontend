@@ -12,27 +12,7 @@ body {
   border-bottom: 0.6px solid rgba(128, 128, 128, 0.938) !important;
 }
 
-/* Gallery */
-.lg-react-element {
-  column-count: 3;
-  column-gap: 10px;
-}
-
-img {
-  max-width: 100%;
-  max-height: 400px;
-  display: block;
-  padding: 5px 0px;
-  border-radius: 20px;
-  transition: transform 0.2s;
-}
-
-img:hover {
-  filter: opacity(.9);
-  transform: scale(1.01);
-}
-
-/* uploadGallery */
+/* Loan */
 
 
 .child {
@@ -43,7 +23,7 @@ img:hover {
   border-radius: 10px;
 }
 
-.galleryData {
+.LoanData {
   background-color: white;
   width: 70%;
   padding: 10px 20px;
@@ -51,21 +31,13 @@ img:hover {
   border-radius: 10px;
 }
 
-.crudIcon {
-  /* margin: 0 10px; */
 
-}
 
-td span {
+td button {
   cursor: pointer;
 }
 
-/* model */
-.useModelParent span {
-  font-size: 2rem;
-  color: red;
-  cursor: pointer;
-}
+
 
 /* auth */
 .outerSignin {
@@ -188,4 +160,24 @@ td span {
 .loader div {
   height: 50px;
   width: 50px;
+}
+
+/* Admin */
+.heading_Loan_Admin {
+  height: 20px;
+  width: 100%;
+  background-color: white !important;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.heading_Loan_Admin div {
+  color: black;
+  font-weight: 600;
+  font-size: 2rem;
 }

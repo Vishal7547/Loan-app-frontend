@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { setAuthenticate, setUser, setIsLogin, isLogin } =
+  const { setAuthenticate, setUser, setIsLogin, isLogin, setIsAdmin } =
     useContext(userContext);
   const [name, setName] = useState("");
   const [isError, setIsError] = useState(false);
@@ -81,7 +81,14 @@ const Signup = () => {
         setUser(res?.data?.user);
         setAuthenticate(res?.data?.success);
         console.log(res.data);
-        navigate("/gallery");
+        if (res?.data?.user.role === "admin") {
+          setIsAdmin(true);
+        }
+        if (res?.data?.user.role === "user") {
+          return navigate("/");
+        } else {
+          return navigate("/admin/request");
+        }
       } else {
         setIsLogin(false);
 

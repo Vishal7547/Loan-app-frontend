@@ -7,7 +7,7 @@ import { userContext } from "../context/myContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAuthenticate, setUser, setIsLogin, isLogin } =
+  const { setAuthenticate, setUser, setIsLogin, isLogin, isAdmin, setIsAdmin } =
     useContext(userContext);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -59,7 +59,14 @@ const Login = () => {
         setUser(res?.data?.user);
 
         setAuthenticate(res?.data?.success);
-        navigate("/gallery");
+        if (res?.data?.user.role === "admin") {
+          setIsAdmin(true);
+        }
+        if (res?.data?.user.role === "user") {
+          return navigate("/");
+        } else {
+          return navigate("/admin/request");
+        }
       } else {
         //  error
         setIsLogin(false);

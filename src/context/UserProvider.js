@@ -5,11 +5,11 @@ const UserProvider = ({ children }) => {
   const [authenticate, setAuthenticate] = useState(false);
   const [user, setUser] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
-  const [gallery, setGallery] = useState([]);
+  const [loan, setLoan] = useState([]);
   const [loader, setLoader] = useState(false);
   const [isUpload, setIsUpload] = useState(false);
-  const [filterGallery, setFilterGallery] = useState([]);
-
+  const [AllLoan, setAllLoan] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const handleLoad = async () => {
     try {
       const { data } = await axios.get(
@@ -20,7 +20,11 @@ const UserProvider = ({ children }) => {
       );
       console.log("user", data);
       setUser(data?.user);
+
       setAuthenticate(data?.success);
+      if (data?.user.role === "admin") {
+        setIsAdmin(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +40,8 @@ const UserProvider = ({ children }) => {
       if (data.success) {
         console.log("logout", data);
         setUser(null);
-        setGallery([]);
+        setLoan([]);
+        setIsAdmin(false);
         setAuthenticate(false);
         return data;
       }
@@ -44,56 +49,110 @@ const UserProvider = ({ children }) => {
       console.log(error);
     }
   };
-  const handleFetchGallery = async () => {
+  const handleFetchLoan = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_KEY}/pic/gallery`,
+        `${process.env.REACT_APP_API_KEY}/loan/loaanstack`,
         {
           withCredentials: true,
         }
       );
-      console.log("gallery", data);
-      setGallery(data?.gallery);
+      console.log("loan", data);
+      setLoan(data?.loans);
     } catch (error) {
       console.log(error);
     }
   };
-  const addImage = async (formdata) => {
+  const addLoan = async (formdata) => {
+    console.log(formdata);
     setLoader(true);
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_KEY}/pic/galleryadd`,
+        `${process.env.REACT_APP_API_KEY}/loan/loanrequest`,
         formdata,
         {
           withCredentials: true,
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
           },
         }
       );
 
       console.log("gallery", data);
-      setGallery([...gallery, data?.gallery]);
+      setLoan([...loan, data?.loan]);
       setLoader(false);
     } catch (error) {
       setLoader(false);
       console.log(error);
     }
   };
-  const deletePic = async (id) => {
-    setLoader(true);
+  const handleGetAllLoan = async () => {
     try {
-      const { data } = await axios.delete(
-        `${process.env.REACT_APP_API_KEY}/pic/gallerydelete/${id}`,
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API_KEY}/loan/loanget`,
         {
           withCredentials: true,
         }
       );
-      setLoader(false);
-      setIsUpload(!isUpload);
-      console.log("deleteGallery", data);
+      console.log("loan", data);
+      setAllLoan(data?.loans);
     } catch (error) {
-      setLoader(false);
+      console.log(error);
+    }
+  };
+  const handleStatusUpdate = async (value, id) => {
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_API_KEY}/loan/loanapproveddmin/${id}`,
+        value,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("updated status", data);
+      // setLoan([...loan, data?.loan]);
+      // setAllLoan([...AllLoan,data?.loan]);
+
+      const updateStatus = AllLoan?.map((l) => {
+        if (l._id === id) {
+          return data?.loan;
+        }
+        return l;
+      });
+      setAllLoan(updateStatus);
+      console.log(updateStatus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleRepayment = async (re, id) => {
+    try {
+      const { data } = await axios.patch(
+        `${process.env.REACT_APP_API_KEY}/loan/repaayment/${id}`,
+        re,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("updated status", data);
+
+      const updateStatus = loan?.map((l) => {
+        if (l._id === id) {
+          return data?.loan;
+        }
+        return l;
+      });
+      setLoan(updateStatus);
+      console.log(updateStatus);
+    } catch (error) {
       console.log(error);
     }
   };
@@ -108,15 +167,18 @@ const UserProvider = ({ children }) => {
         setUser,
         setIsLogin,
         isLogin,
-        handleFetchGallery,
-        gallery,
-        addImage,
+        handleFetchLoan,
+        setLoan,
+        addLoan,
         loader,
-        deletePic,
         isUpload,
-        setGallery,
-        setFilterGallery,
-        filterGallery,
+        loan,
+        handleGetAllLoan,
+        AllLoan,
+        handleStatusUpdate,
+        handleRepayment,
+        setIsAdmin,
+        isAdmin,
       }}
     >
       {children}
