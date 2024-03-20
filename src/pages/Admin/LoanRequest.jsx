@@ -1,10 +1,18 @@
 import React, { useEffect, useContext } from "react";
 import { userContext } from "../../context/myContext";
-import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 
+import { Select } from "antd";
 const LoanRequest = () => {
-  const { handleGetAllLoan, AllLoan, handleStatusUpdate } =
+  const { handleGetAllLoan, loLogOut, AllLoan, handleStatusUpdate } =
     useContext(userContext);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    const data = await loLogOut();
+    if (data.success) {
+      navigate("/login");
+    }
+  };
   useEffect(() => {
     const fetchLoan = async () => {
       await handleGetAllLoan();
@@ -25,6 +33,14 @@ const LoanRequest = () => {
         <div className="row">
           <div className="col-md-2"></div>
           <div className="col-md-9">
+            <div className="row">
+              <button
+                className=" my-3 w-25 btn btn-dark"
+                onClick={handleLogout}
+              >
+                LOGOUT
+              </button>
+            </div>
             <div className="row text-center my-2">
               <div className="heading_Loan_Admin">
                 <div>LOAN STATUS</div>
