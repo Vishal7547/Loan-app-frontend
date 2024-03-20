@@ -21,6 +21,11 @@ The Mini-Loan App is a web application that allows authenticated users to apply 
 
 - frontend live url : `https://loan-app-frontend-phi.vercel.app/login`
 
+- video url : `https://res.cloudinary.com/dh9qvkjr1/video/upload/v1710941910/rdx92znmjjf7t8bj9g5p.mkv`
+
+- admin email : vishalk80269@gmail.com
+- admin password : 123456
+
 2. Install dependencies:
    - Server: `cd server && npm install`
    - Client: `cd client && npm install`
@@ -35,15 +40,6 @@ The Mini-Loan App is a web application that allows authenticated users to apply 
 4. Run the server: `npm run dev` in the server directory.
 5. Run the client: `npm start` in the client directory.
 6. Access the app at `http://localhost:3000`.
-
-## API Endpoints
-
-- **POST /api/loans/create:** Create a new loan request.
-- **GET /api/loans/:userId:** Get all loans belonging to a user.
-- **GET /api/loans/pending:** Get all pending loans.
-- **PUT /api/loans/approve/:loanId:** Approve a pending loan.
-- **POST /api/repayments/create:** Add a new repayment.
-- **GET /api/repayments/:loanId:** Get all repayments for a loan.
 
 ## Technologies Used
 

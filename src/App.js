@@ -51,7 +51,7 @@ const AppRoute = () => {
         </Route>
 
         <Route element={<PrivateAuth />}>
-          <Route path="/" element={<Signup />} />
+          <Route path="/register" element={<Signup />} />
           <Route path="/login" element={<Login />} />
         </Route>
       </Routes>

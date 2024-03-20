@@ -128,7 +128,7 @@ const Login = () => {
               {isLogin ? "Loading..." : "Login"}
             </button>
             <div className="signuplog ">
-              <span onClick={() => navigate("/")}> Register here</span>
+              <span onClick={() => navigate("/register")}> Register here</span>
             </div>
           </form>
         </div>
